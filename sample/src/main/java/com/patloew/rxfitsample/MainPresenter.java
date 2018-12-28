@@ -69,7 +69,7 @@ public class MainPresenter {
         disposable.add(
                 rxFit.history().readBuckets(dataReadRequestServer)
                     .doOnError(throwable -> { if(throwable instanceof StatusException && ((StatusException)throwable).getStatus().getStatusCode() == CommonStatusCodes.TIMEOUT) Log.e("MainActivity", "Timeout on server query request", throwable); })
-                    .compose(RxFitOnExceptionResumeNext.with(rxFit.history().readBuckets(dataReadRequest)))
+                    .compose(RxFitOnExceptionResumeNext.INSTANCE.with(rxFit.history().readBuckets(dataReadRequest)))
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onBucketLoaded, this::onBucketLoadError, () -> view.onFitnessSessionDataLoaded(fitnessSessionDataList))
